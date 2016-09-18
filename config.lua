@@ -3,8 +3,8 @@ application =
 	content =
 	{
 		graphicsCompatibility = 1,
-		width = 768,
-		height = 1024,
+		width = 720,
+		height = 1280,
 		scale = "zoomEven",
 		
 		imageSuffix =
