@@ -1,3 +1,4 @@
+require "arremesso"
 fisica = require("physics")
 fisica.start()
 
@@ -20,18 +21,18 @@ local sequenceData =
 {
 	{ name = "idleDown", start = 1, count = 1, time = 0, loopCount = 1 },
     { name = "moveLeft", start = 5, count = 2, time = 1000, loopCount = 0 },
-    { name = "moveRight", start = 8, count = 2, time = 1000, loopCount = 0 },
+    { name = "moveRight", start = 8, count = 2, time = 1000, loopCount = 0 }
 }
 
 -- cria a sprite utilizando a propriedades vistas acima
 local player = display.newSprite(sheet, sequenceData)
 player.x = w
-player.y = h * .8
+player.y = h * .85
 fisica.addBody(player, "kinematic", {density=1, friction=1, bounce=0.5})
 
-local player2 = display.newRect(0, 0, 30, 30)
+local player2 = display.newSprite(sheet, sequenceData)
 player2.x = 0
-player2.y = h * .7
+player2.y = h * .75
 fisica.addBody(player2, "kinematic", {density=1, friction=1, bounce=0.5})
 
 function moverPlayerDireitaEsquerda(self, event)
@@ -50,11 +51,11 @@ function moverPlayerEsquerdaDireita(self, event)
 	end
 end
 
-player:setSequence("moveLeft")
+player:setSequence( "moveLeft" )
 player.enterFrame = moverPlayerDireitaEsquerda
 player:play()
 
-player2:setSequence("moveRight")
+player2:setSequence( "moveRight" )
 player2.enterFrame = moverPlayerEsquerdaDireita
 player2:play()
 
@@ -68,7 +69,7 @@ local function detectarColisao( event )
     end
 end
 
-Runtime:addEventListener("enterFrame", player)
-Runtime:addEventListener("enterFrame", player2)
+Runtime:addEventListener( "enterFrame", player )
+Runtime:addEventListener( "enterFrame", player2 )
 Runtime:addEventListener( "collision", detectarColisao )
 Runtime:addEventListener( "enterFrame", atualizarPontos )
