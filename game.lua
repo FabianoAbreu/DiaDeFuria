@@ -39,22 +39,22 @@ local function atualizarPontosNaTela ( event )
 end
 
 local function moverPlayerDireitaEsquerda( self )
-	if ( self.x > -100 ) then
-		self.x = self.x - 3
-	else
+	if ( self.x < -100 ) or ( quantErros == 3 ) then
 		self.enterFrame = nil
 		display.remove( self )
 		self = nil
+	elseif ( self.x > -100 ) then
+		self.x = self.x - 3
 	end
 end
 
 local function moverPlayerEsquerdaDireita( self )
-	if (self.x < 2020) then
-		self.x = self.x + 3
-	else
+	if ( self.x > 2020 ) or ( quantErros == 3 ) then
 		self.enterFrame = nil
 		display.remove( self )
 		self = nil
+	elseif ( self.x < 2020 ) then
+		self.x = self.x + 3
 	end
 end
 
@@ -291,9 +291,9 @@ function scene:hide( event )
     if event.phase == "will" then
         physics.stop()
         timer.cancel( spawnEnemies )
-		Runtime:addEventListener( "touch", screenTouch )
-		Runtime:addEventListener( "enterFrame", atualizarPontosNaTela )
-		Runtime:addEventListener( "enterFrame", gameOver )
+		Runtime:removeEventListener( "touch", screenTouch )
+		Runtime:removeEventListener( "enterFrame", atualizarPontosNaTela )
+		Runtime:removeEventListener( "enterFrame", gameOver )
     end
 end
 
