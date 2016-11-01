@@ -92,11 +92,11 @@ function scene:create( event )
         defaultFile = "Imagens/creditos.png",
         id = "button4",
         width = 550,
-        height = 120,
+        height = 150,
         onEvent = handleCreditsButtonEvent
     })
     creditsButton.x = display.contentCenterX
-    creditsButton.y = display.contentCenterY + 90
+    creditsButton.y = display.contentCenterY + 100
     sceneGroup:insert( creditsButton )
 
 end
