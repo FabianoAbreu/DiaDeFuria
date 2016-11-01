@@ -11,7 +11,7 @@ local device = require( "device" )
 local params
 local newHighScore = false
 
-local function handleButtonEvent( event )
+local function voltarParaOMenu( event )
 
     if ( "ended" == event.phase ) then
         local options = {
@@ -27,11 +27,11 @@ local function handleButtonEvent( event )
     return true
 end
 
-local function showLeaderboard( event )
-    if event.phase == "ended" then
-        gameNetwork.show( "leaderboards", { leaderboard = {timeScope="AllTime"}} )
+local function reiniciarJogo( event )
+     if ( "ended" == event.phase ) then
+        composer.removeScene( "game", false )
+        composer.gotoScene("game", { effect = "crossFade", time = 333 })
     end
-    return true
 end
 
 local function postToGameNetwork()
@@ -64,33 +64,34 @@ function scene:create( event )
     background.y = display.contentCenterY
     sceneGroup:insert( background )
 
-    local gameOverText = display.newText("Game Over", 0, 0, native.systemFontBold, 32 )
-    gameOverText:setFillColor( 0 )
-    gameOverText.x = display.contentCenterX
-    gameOverText.y = 50
-    sceneGroup:insert(gameOverText)
+    local title = display.newImage("Imagens/fimdejogo.png") 
+    title.x = display.contentCenterX
+    title.y = 150
+    title.width = 800
+    title.height = 150
+    sceneGroup:insert(title)
 
-    local leaderBoardButton = widget.newButton({
+    local voltarAoMenuButton = widget.newButton({
+        defaultFile = "Imagens/voltaraomenu.png",
         id = "leaderboard",
-        label = "Leaderboard",
-        width = 125,
-        height = 32,
-        onEvent = showLeaderboard
+        width = 650,
+        height = 150,
+        onEvent = voltarParaOMenu
     })
-    leaderBoardButton.x = display.contentCenterX 
-    leaderBoardButton.y = 225
-    sceneGroup:insert( leaderBoardButton )
+    voltarAoMenuButton.x = display.contentCenterX 
+    voltarAoMenuButton.y = display.contentCenterY - 150
+    sceneGroup:insert( voltarAoMenuButton )
 
-    local doneButton = widget.newButton({
+    local reiniciarJogoButton = widget.newButton({
+         defaultFile = "Imagens/reiniciarjogo.png",
         id = "button1",
-        label = "Done",
-        width = 100,
-        height = 32,
-        onEvent = handleButtonEvent
+        width = 650,
+        height = 150,
+        onEvent = reiniciarJogo
     })
-    doneButton.x = display.contentCenterX
-    doneButton.y = display.contentHeight - 40
-    sceneGroup:insert( doneButton )
+    reiniciarJogoButton.x = display.contentCenterX
+    reiniciarJogoButton.y = display.contentCenterY + 100
+    sceneGroup:insert( reiniciarJogoButton )
 end
 
 function scene:show( event )
