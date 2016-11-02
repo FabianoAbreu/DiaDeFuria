@@ -1,36 +1,22 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
-
 local widget = require( "widget" )
 local utility = require( "utility" )
 local ads = require( "ads" )
+local myData = require( "mydata" )
 
 local params
 
-local myData = require( "mydata" )
-
-local function handlePlayButtonEvent( event )
+local function iniciarJogoEvent( event )
     if ( "ended" == event.phase ) then
         composer.removeScene( "game", false )
         composer.gotoScene("game", { effect = "crossFade", time = 333 })
     end
 end
 
--- local function handleHelpButtonEvent( event )
---     if ( "ended" == event.phase ) then
---         composer.gotoScene("help", { effect = "crossFade", time = 333, isModal = true })
---     end
--- end
-
--- local function handleCreditsButtonEvent( event )
---     if ( "ended" == event.phase ) then
---         composer.gotoScene("gamecredits", { effect = "crossFade", time = 333 })
---     end
--- end
-
-local function handleSettingsButtonEvent( event )
+local function creditosEvent( event )
     if ( "ended" == event.phase ) then
-        composer.gotoScene("gamesettings", { effect = "crossFade", time = 333 })
+        composer.gotoScene("gamecredits", { effect = "crossFade", time = 333 })
     end
 end
 
@@ -44,61 +30,34 @@ function scene:create( event )
     background.y = display.contentCenterY
     sceneGroup:insert( background )
 
-    local title = display.newImage("Imagens/enfezado.png") 
+    local title = display.newImage("imagens/enfezado.png") 
     title.x = display.contentCenterX
     title.y = 150
     title.width = 800
     title.height = 150
     sceneGroup:insert( title )
 
-    -- Create the widget
-    local playButton = widget.newButton ({
-        defaultFile = "Imagens/play1.png",
+    local iniciarJogoButton = widget.newButton ({
+        defaultFile = "imagens/iniciar.png",
         id = "button1",
-        width = 600,
+        width = 500,
         height = 150,
-        onEvent = handlePlayButtonEvent
+        onEvent = iniciarJogoEvent
     })
-    playButton.x = display.contentCenterX
-    playButton.y = display.contentCenterY - 100
-    sceneGroup:insert( playButton )
+    iniciarJogoButton.x = display.contentCenterX
+    iniciarJogoButton.y = display.contentCenterY - 100
+    sceneGroup:insert( iniciarJogoButton )
 
-    -- -- Create the widget
-    -- local settingsButton = widget.newButton({
-    --     id = "button2",
-    --     label = "Settings",
-    --     width = 100,
-    --     height = 32,
-    --     onEvent = handleSettingsButtonEvent
-    -- })
-    -- settingsButton.x = display.contentCenterX
-    -- settingsButton.y = display.contentCenterY - 30
-    -- sceneGroup:insert( settingsButton )
-
-    -- -- Create the widget
-    -- local helpButton = widget.newButton({
-    --     id = "button3",
-    --     label = "Help",
-    --     width = 100,
-    --     height = 32,
-    --     onEvent = handleHelpButtonEvent
-    -- })
-    -- helpButton.x = display.contentCenterX
-    -- helpButton.y = display.contentCenterY + 30
-    -- sceneGroup:insert( helpButton )
-
-    -- Create the widget
-    local creditsButton = widget.newButton({
-        defaultFile = "Imagens/creditos.png",
+    local creditosButton = widget.newButton({
+        defaultFile = "imagens/creditos.png",
         id = "button4",
-        width = 550,
+        width = 500,
         height = 150,
-        onEvent = handleCreditsButtonEvent
+        onEvent = creditosEvent
     })
-    creditsButton.x = display.contentCenterX
-    creditsButton.y = display.contentCenterY + 100
-    sceneGroup:insert( creditsButton )
-
+    creditosButton.x = display.contentCenterX
+    creditosButton.y = display.contentCenterY + 120
+    sceneGroup:insert( creditosButton )
 end
 
 function scene:show( event )
