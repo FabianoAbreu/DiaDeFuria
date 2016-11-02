@@ -1,6 +1,5 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
-
 local widget = require( "widget" )
 local json = require( "json" )
 local utility = require( "utility" )
@@ -11,7 +10,7 @@ local device = require( "device" )
 local params
 local newHighScore = false
 
-local function voltarParaOMenu( event )
+local function voltarParaOMenuEvent( event )
 
     if ( "ended" == event.phase ) then
         local options = {
@@ -27,26 +26,26 @@ local function voltarParaOMenu( event )
     return true
 end
 
-local function reiniciarJogo( event )
+local function reiniciarJogoEvent( event )
      if ( "ended" == event.phase ) then
         composer.removeScene( "game", false )
         composer.gotoScene("game", { effect = "crossFade", time = 333 })
     end
 end
 
-local function postToGameNetwork()
-    local category = "com.yourdomain.yourgame.leaderboard"
-    if myData.isGPGS then
-        category = "CgkIusrvppwDJFHJKDFg"
-    end
-    gameNetwork.request("setHighScore", {
-        localPlayerScore = {
-            category = category, 
-            value = myData.settings.bestScore
-        },
-        listener = postScoreSubmit
-    })
-end
+-- local function postToGameNetwork()
+--     local category = "com.yourdomain.yourgame.leaderboard"
+--     if myData.isGPGS then
+--         category = "CgkIusrvppwDJFHJKDFg"
+--     end
+--     gameNetwork.request("setHighScore", {
+--         localPlayerScore = {
+--             category = category, 
+--             value = myData.settings.bestScore
+--         },
+--         listener = postScoreSubmit
+--     })
+-- end
 --
 -- Start the composer event handlers
 --
@@ -76,7 +75,7 @@ function scene:create( event )
         id = "leaderboard",
         width = 650,
         height = 150,
-        onEvent = voltarParaOMenu
+        onEvent = voltarParaOMenuEvent
     })
     voltarAoMenuButton.x = display.contentCenterX 
     voltarAoMenuButton.y = display.contentCenterY - 150
@@ -87,7 +86,7 @@ function scene:create( event )
         id = "button1",
         width = 650,
         height = 150,
-        onEvent = reiniciarJogo
+        onEvent = reiniciarJogoEvent
     })
     reiniciarJogoButton.x = display.contentCenterX
     reiniciarJogoButton.y = display.contentCenterY + 100
