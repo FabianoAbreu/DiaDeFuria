@@ -9,6 +9,8 @@ local device = require( "device" )
 
 local params
 local newHighScore = false
+local largura = display.contentWidth
+local altura = display.contentHeight
 
 local function voltarParaOMenuEvent( event )
 
@@ -53,17 +55,13 @@ function scene:create( event )
     local sceneGroup = self.view
 
     params = event.params
-        
-    --
-    -- setup a page background, really not that important though composer
-    -- crashes out if there isn't a display object in the view.
-    --
+
     local background = display.newRect( 0, 0, 1920, 1080)
     background.x = display.contentCenterX
     background.y = display.contentCenterY
     sceneGroup:insert( background )
 
-    local title = display.newImage("Imagens/fimdejogo.png") 
+    local title = display.newImage("imagens/fimdejogo.png") 
     title.x = display.contentCenterX
     title.y = 150
     title.width = 800
@@ -71,25 +69,25 @@ function scene:create( event )
     sceneGroup:insert(title)
 
     local voltarAoMenuButton = widget.newButton({
-        defaultFile = "Imagens/voltaraomenu.png",
-        id = "leaderboard",
-        width = 650,
-        height = 150,
+        defaultFile = "imagens/menu.png",
+        id = "menu",
+        width = 500,
+        height = 110,
         onEvent = voltarParaOMenuEvent
     })
-    voltarAoMenuButton.x = display.contentCenterX 
-    voltarAoMenuButton.y = display.contentCenterY - 150
+    voltarAoMenuButton.x = display.contentCenterX/2
+    voltarAoMenuButton.y = display.contentCenterY + (altura*0.35)
     sceneGroup:insert( voltarAoMenuButton )
 
     local reiniciarJogoButton = widget.newButton({
-         defaultFile = "Imagens/reiniciarjogo.png",
-        id = "button1",
-        width = 650,
+         defaultFile = "imagens/jogar.png",
+        id = "reiniciarJogo",
+        width = 500,
         height = 150,
         onEvent = reiniciarJogoEvent
     })
-    reiniciarJogoButton.x = display.contentCenterX
-    reiniciarJogoButton.y = display.contentCenterY + 100
+    reiniciarJogoButton.x = display.contentCenterX + (display.contentCenterX/2)
+    reiniciarJogoButton.y = display.contentCenterY + (altura*0.35)
     sceneGroup:insert( reiniciarJogoButton )
 end
 
@@ -99,17 +97,7 @@ function scene:show( event )
     params = event.params
 
     if event.phase == "did" then
-        --
-        -- Hook up your score code here to support updating your leaderboards
-        --[[
-        if newHighScore then
-            local popup = display.newText("New High Score", 0, 0, native.systemFontBold, 32)
-            popup.x = display.contentCenterX
-            popup.y = display.contentCenterY
-            sceneGroup:insert( popup )
-            postToGameNetwork(); 
-        end
-        --]]
+    
     end
 end
 
