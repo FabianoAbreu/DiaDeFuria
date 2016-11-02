@@ -14,7 +14,6 @@ local physicsDataED = (require "inimigoEDFisica").physicsData(1.0)
 local largura = display.contentWidth
 local altura = display.contentHeight
 local pontuacao = 0
-local texto = display.newText( "0", largura*0.5, altura*0.02, native.systemFont, 50 )
 local sequenceDataDE
 local sequenceDataED
 local inimigos = {}
@@ -22,21 +21,11 @@ local bolinhaPapel
 local verificarIndex = 0
 local quantErros = 0
 local spawnEnemies
-local currentScore
-local currentScoreDisplay
-local levelText
-
-local function gameOver( event )
-	if ( quantErros == 3 ) then
-		composer.removeScene("gameover")
-        composer.gotoScene( "gameover", { time= 500, effect = "crossFade" })
-	end
-	return true
-end
-
-local function atualizarPontosNaTela ( event )
-	texto.text = math.floor( pontuacao )
-end
+local vida1
+local vida2
+local vida3
+local pontuacaoCorrente
+local pontuacaoCorrenteDisplay
 
 local function moverPlayerDireitaEsquerda( self )
 	if ( self.x < -100 ) or ( quantErros == 3 ) then
@@ -61,8 +50,9 @@ end
 local function detectarColisao( self, event )
 	if ( event.phase == "began" )  then
 		if ( self.myName == "bola" ) and ( event.other.myName == "inimigo" ) then
-            pontuacao = pontuacao + 10
-            bolinhaPapel.enterFrame = nil
+            pontuacaoCorrente = pontuacaoCorrente + 10
+			pontuacaoCorrenteDisplay.text = string.format( "%06d", pontuacaoCorrente )
+			bolinhaPapel.enterFrame = nil
 			display.remove( bolinhaPapel )
 	 	    bolinhaPapel = nil
 		end
@@ -77,22 +67,37 @@ local function detectarNaoHouveColisao ( self )
 		display.remove( self )
 	 	self = nil
 
-		 -- indicar a perda de vida
 		quantErros = quantErros + 1
-		if ( quantErros == 1 ) then
-			local vida1 = display.newImageRect( "Imagens/object.png", 64, 64 )
-			vida1.x = 50
-			vida1.y = 50
-		elseif (quantErros == 2) then
-			local vida2 = display.newImageRect( "Imagens/object.png", 64, 64 )
-			vida2.x = 100
-			vida2.y = 50
-		else
-			local vida3 = display.newImageRect( "Imagens/object.png", 64, 64 )
-			vida3.x = 150
-			vida3.y = 50
-		end
 	end
+end
+
+local function preencherVidaPerdida(event)
+	local sceneGroup = scene.view
+	vida1 = display.newImageRect( "Imagens/object.png", 32, 32 )
+  	sceneGroup:insert(vida1)
+   	vida2 = display.newImageRect( "Imagens/object.png", 32, 32 )
+   	sceneGroup:insert(vida2)
+   	vida3 = display.newImageRect( "Imagens/object.png", 32, 32 )
+  	sceneGroup:insert(vida3)
+	
+	if ( quantErros == 1 ) then
+		vida1.x = 50
+		vida1.y = 50
+	elseif ( quantErros == 2 ) then
+		vida2.x = 100
+		vida2.y = 50
+	elseif (quantErros == 3) then
+		vida3.x = 150
+		vida3.y = 50
+	end
+end
+
+local function gameOver( event )
+	if ( quantErros == 3 ) then
+		composer.removeScene("gameover")
+        composer.gotoScene( "gameover", { time= 1500, effect = "crossFade" })
+	end
+	return true
 end
 
 -------------------------------------------------------------------------------------------------------------------------------
@@ -182,54 +187,56 @@ local sheetInimigoED_1 = graphics.newImageSheet("Imagens/inimigoED_1.png", sheet
 local sheetInimigoDE_2 = graphics.newImageSheet("Imagens/inimigoDE_2.png", sheetInfoInimigoDE:getSheet())
 local sheetInimigoED_2 = graphics.newImageSheet("Imagens/inimigoED_2.png", sheetInfoInimigoED:getSheet())
 
-local function criandoInimigos()
-	inimigos[1] = display.newSprite(sheetInimigoDE_1, sequenceDataDE)
-	inimigos[1].x = largura + 100
-	inimigos[1].y = altura*0.7
-	fisica.addBody(inimigos[1], "kinematic", physicsDataDE:get("sprite_DE"))
-	inimigos[1]:setSequence("moveLeft")
-	inimigos[1].enterFrame = moverPlayerDireitaEsquerda
-    inimigos[1].myName = "inimigo"
-
-	inimigos[2] = display.newSprite(sheetInimigoDE_2,  sequenceDataDE)
-	inimigos[2].x = largura + 100
-	inimigos[2].y = altura*0.7
-	fisica.addBody(inimigos[2], "kinematic", physicsDataDE:get("sprite_DE"))
-	inimigos[2]:setSequence("moveLeft")
-	inimigos[2].enterFrame = moverPlayerDireitaEsquerda
-    inimigos[2].myName = "inimigo"
-
-	inimigos[3] = display.newSprite(sheetInimigoED_1, sequenceDataED)
-	inimigos[3].x = -100
-	inimigos[3].y = altura*0.8
-	fisica.addBody(inimigos[3], "kinematic", physicsDataED:get("sprite_ED"))
-	inimigos[3]:setSequence("moveRight")
-	inimigos[3].enterFrame = moverPlayerEsquerdaDireita
-    inimigos[3].myName = "inimigo"
-	
-	inimigos[4] = display.newSprite(sheetInimigoED_2, sequenceDataDE)
-	inimigos[4].x = -100
-	inimigos[4].y = altura*0.8
-	fisica.addBody(inimigos[4], "kinematic", physicsDataED:get("sprite_ED"))
-	inimigos[4]:setSequence("moveRight")
-	inimigos[4].enterFrame = moverPlayerEsquerdaDireita
-    inimigos[4].myName = "inimigo"
-
-	inimigos[5] = display.newSprite(sheetInimigoDE_1, sequenceDataDE)
-	inimigos[5].x = largura + 100
-	inimigos[5].y = altura*0.9
-	fisica.addBody(inimigos[5], "kinematic", physicsDataDE:get("sprite_DE"))
-	inimigos[5]:setSequence("moveLeft")
-	inimigos[5].enterFrame = moverPlayerDireitaEsquerda
-    inimigos[5].myName = "inimigo"
-
-	inimigos[6] = display.newSprite(sheetInimigoDE_2,  sequenceDataDE)
-	inimigos[6].x = largura + 100
-	inimigos[6].y = altura*0.9
-	fisica.addBody(inimigos[6], "kinematic", physicsDataDE:get("sprite_DE"))
-	inimigos[6]:setSequence("moveLeft")
-	inimigos[6].enterFrame = moverPlayerDireitaEsquerda
-    inimigos[6].myName = "inimigo"
+local function criandoInimigos(index)
+	if ( index == 1 ) then
+		inimigos[1] = display.newSprite(sheetInimigoDE_1, sequenceDataDE)
+		inimigos[1].x = largura + 100
+		inimigos[1].y = altura*0.7
+		fisica.addBody(inimigos[1], "kinematic", physicsDataDE:get("sprite_DE"))
+		inimigos[1]:setSequence("moveLeft")
+		inimigos[1].enterFrame = moverPlayerDireitaEsquerda
+		inimigos[1].myName = "inimigo"
+	elseif ( index == 2 ) then
+		inimigos[2] = display.newSprite(sheetInimigoDE_2,  sequenceDataDE)
+		inimigos[2].x = largura + 100
+		inimigos[2].y = altura*0.7
+		fisica.addBody(inimigos[2], "kinematic", physicsDataDE:get("sprite_DE"))
+		inimigos[2]:setSequence("moveLeft")
+		inimigos[2].enterFrame = moverPlayerDireitaEsquerda
+		inimigos[2].myName = "inimigo"
+	elseif ( index == 3 ) then
+		inimigos[3] = display.newSprite(sheetInimigoED_1, sequenceDataED)
+		inimigos[3].x = -100
+		inimigos[3].y = altura*0.8
+		fisica.addBody(inimigos[3], "kinematic", physicsDataED:get("sprite_ED"))
+		inimigos[3]:setSequence("moveRight")
+		inimigos[3].enterFrame = moverPlayerEsquerdaDireita
+		inimigos[3].myName = "inimigo"
+	elseif ( index == 4 ) then
+		inimigos[4] = display.newSprite(sheetInimigoED_2, sequenceDataDE)
+		inimigos[4].x = -100
+		inimigos[4].y = altura*0.8
+		fisica.addBody(inimigos[4], "kinematic", physicsDataED:get("sprite_ED"))
+		inimigos[4]:setSequence("moveRight")
+		inimigos[4].enterFrame = moverPlayerEsquerdaDireita
+		inimigos[4].myName = "inimigo"
+	elseif ( index == 5 ) then
+		inimigos[5] = display.newSprite(sheetInimigoDE_1, sequenceDataDE)
+		inimigos[5].x = largura + 100
+		inimigos[5].y = altura*0.9
+		fisica.addBody(inimigos[5], "kinematic", physicsDataDE:get("sprite_DE"))
+		inimigos[5]:setSequence("moveLeft")
+		inimigos[5].enterFrame = moverPlayerDireitaEsquerda
+		inimigos[5].myName = "inimigo"
+	elseif ( index == 6 ) then
+		inimigos[6] = display.newSprite(sheetInimigoDE_2,  sequenceDataDE)
+		inimigos[6].x = largura + 100
+		inimigos[6].y = altura*0.9
+		fisica.addBody(inimigos[6], "kinematic", physicsDataDE:get("sprite_DE"))
+		inimigos[6]:setSequence("moveLeft")
+		inimigos[6].enterFrame = moverPlayerDireitaEsquerda
+		inimigos[6].myName = "inimigo"
+	end
 end
 
 local function inserindoInimigosNaTela ( event )
@@ -238,7 +245,7 @@ local function inserindoInimigosNaTela ( event )
 	if (index == verificarIndex) then
 		inserindoInimigosNaTela()
 	else
-		criandoInimigos()
+		criandoInimigos(index)
 		inimigos[index].collision = detectarColisao
 		inimigos[index]:addEventListener( "collision" )
 		Runtime:addEventListener( "enterFrame", inimigos[index] )
@@ -250,26 +257,28 @@ end
 function scene:create( event )
     local sceneGroup = self.view
     fisica.start()
-    fisica.pause()
+    --fisica.pause()
 
-    local background = display.newImage("Imagens/background.png") 
+    local background = display.newImage("imagens/background.png") 
     sceneGroup:insert(background)
 
-	local vidaDisponivel1 = display.newImageRect( "Imagens/object-vida.png", 64, 64 )
+	local vidaDisponivel1 = display.newImageRect( "imagens/object-vida.png", 64, 64 )
 	vidaDisponivel1.x = 50
 	vidaDisponivel1.y = 50
+	sceneGroup:insert(vidaDisponivel1)
 
-	local vidaDisponivel2 = display.newImageRect( "Imagens/object-vida.png", 64, 64 )
+	local vidaDisponivel2 = display.newImageRect( "imagens/object-vida.png", 64, 64 )
 	vidaDisponivel2.x = 100
 	vidaDisponivel2.y = 50
-
-	local vidaDisponivel3 = display.newImageRect( "Imagens/object-vida.png", 64, 64 )
+	sceneGroup:insert(vidaDisponivel2)
+	
+	local vidaDisponivel3 = display.newImageRect( "imagens/object-vida.png", 64, 64 )
 	vidaDisponivel3.x = 150
 	vidaDisponivel3.y = 50
+	sceneGroup:insert(vidaDisponivel3)
    
- 	--currentScoreDisplay = display.newText("000000", largura*0.5, altura*0.02, native.systemFont, 50 )
-    currentScoreDisplay = display.newText("000000", display.contentWidth - 50, 10, native.systemFont, 16 )
-    sceneGroup:insert( currentScoreDisplay )
+    pontuacaoCorrenteDisplay = display.newText("000000", display.contentWidth - (largura*0.1), 10, native.systemFont, 50 )
+    sceneGroup:insert( pontuacaoCorrenteDisplay )
 end
 
 function scene:show( event )
@@ -278,11 +287,11 @@ function scene:show( event )
         physics.start()
 		spawnEnemies = timer.performWithDelay( 3000, inserindoInimigosNaTela, -1 )
 		Runtime:addEventListener( "touch", screenTouch )
-		Runtime:addEventListener( "enterFrame", atualizarPontosNaTela )
 		Runtime:addEventListener( "enterFrame", gameOver )
+		Runtime:addEventListener( "enterFrame", preencherVidaPerdida )
     else
-        currentScore = 0
-        currentScoreDisplay.text = string.format( "%06d", currentScore )
+        pontuacaoCorrente = 0
+        pontuacaoCorrenteDisplay.text = string.format( "%06d", pontuacaoCorrente )
     end
 end
 
@@ -292,8 +301,8 @@ function scene:hide( event )
         physics.stop()
         timer.cancel( spawnEnemies )
 		Runtime:removeEventListener( "touch", screenTouch )
-		Runtime:removeEventListener( "enterFrame", atualizarPontosNaTela )
 		Runtime:removeEventListener( "enterFrame", gameOver )
+		Runtime:removeEventListener( "enterFrame", preencherVidaPerdida )
     end
 end
 
