@@ -75,8 +75,8 @@ function scene:create( event )
         height = 110,
         onEvent = voltarParaOMenuEvent
     })
-    voltarAoMenuButton.x = display.contentCenterX/2
-    voltarAoMenuButton.y = display.contentCenterY + (altura*0.35)
+    voltarAoMenuButton.x = display.contentCenterX
+    voltarAoMenuButton.y = display.contentCenterY - 100
     sceneGroup:insert( voltarAoMenuButton )
 
     local reiniciarJogoButton = widget.newButton({
@@ -86,8 +86,8 @@ function scene:create( event )
         height = 150,
         onEvent = reiniciarJogoEvent
     })
-    reiniciarJogoButton.x = display.contentCenterX + (display.contentCenterX/2)
-    reiniciarJogoButton.y = display.contentCenterY + (altura*0.35)
+    reiniciarJogoButton.x = display.contentCenterX
+    reiniciarJogoButton.y = display.contentCenterY + 120
     sceneGroup:insert( reiniciarJogoButton )
 end
 

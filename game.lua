@@ -33,7 +33,7 @@ local function moverPlayerDireitaEsquerda( self )
 		display.remove( self )
 		self = nil
 	elseif ( self.x > -100 ) then
-		self.x = self.x - 3
+		self.x = self.x - 5
 	end
 end
 
@@ -43,7 +43,7 @@ local function moverPlayerEsquerdaDireita( self )
 		display.remove( self )
 		self = nil
 	elseif ( self.x < 2020 ) then
-		self.x = self.x + 3
+		self.x = self.x + 5
 	end
 end
 
@@ -257,25 +257,27 @@ end
 function scene:create( event )
     local sceneGroup = self.view
     fisica.start()
-    --fisica.pause()
 
     local background = display.newImage("imagens/background.png") 
-    sceneGroup:insert(background)
+    sceneGroup:insert( background )
+
+	local backgroundMusic = audio.loadStream( "audio/If_I_Had_a_Chicken.mp3" )
+	audio.play( backgroundMusic, { channel=2, loops=-1, fadein=5000 } )
 
 	local vidaDisponivel1 = display.newImageRect( "imagens/object-vida.png", 64, 64 )
 	vidaDisponivel1.x = 50
 	vidaDisponivel1.y = 50
-	sceneGroup:insert(vidaDisponivel1)
+	sceneGroup:insert( vidaDisponivel1 )
 
 	local vidaDisponivel2 = display.newImageRect( "imagens/object-vida.png", 64, 64 )
 	vidaDisponivel2.x = 100
 	vidaDisponivel2.y = 50
-	sceneGroup:insert(vidaDisponivel2)
+	sceneGroup:insert( vidaDisponivel2 )
 	
 	local vidaDisponivel3 = display.newImageRect( "imagens/object-vida.png", 64, 64 )
 	vidaDisponivel3.x = 150
 	vidaDisponivel3.y = 50
-	sceneGroup:insert(vidaDisponivel3)
+	sceneGroup:insert( vidaDisponivel3 )
    
     pontuacaoCorrenteDisplay = display.newText("000000", display.contentWidth - (largura*0.1), 10, native.systemFont, 50 )
     sceneGroup:insert( pontuacaoCorrenteDisplay )
@@ -298,6 +300,7 @@ end
 function scene:hide( event )
     local sceneGroup = self.view
     if event.phase == "will" then
+		audio.stop()
         physics.stop()
         timer.cancel( spawnEnemies )
 		Runtime:removeEventListener( "touch", screenTouch )
