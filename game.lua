@@ -25,6 +25,7 @@ local vida2
 local vida3
 local pontuacaoCorrente
 local pontuacaoCorrenteDisplay
+local valorAlpha = 1
 
 local function moverPlayerDireitaEsquerda( self )
 	if ( self.x < -100 ) or ( quantErros == 3 ) then
@@ -47,8 +48,7 @@ local function moverPlayerEsquerdaDireita( self )
 end
 
 local function setAlpha ( objeto ) 
-	objeto.alpha = 0
-	objeto.alpha = 1
+    transition.to( objeto, {time=1250, alpha=0})
 end
 
 local function detectarColisao( self, event )
@@ -58,7 +58,7 @@ local function detectarColisao( self, event )
 			audio.play( somColisao )
             pontuacaoCorrente = pontuacaoCorrente + 10
 			pontuacaoCorrenteDisplay.text = string.format( "%06d", pontuacaoCorrente )
-			--event.other.alpha = 0
+			setAlpha(event.other)
 			bolinhaPapel.enterFrame = nil
 			display.remove( bolinhaPapel )
 	 	    bolinhaPapel = nil
