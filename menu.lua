@@ -25,10 +25,14 @@ function scene:create( event )
 
     params = event.params
 
-    local background = display.newRect( 0, 0, 1920, 1080 )
+    local background = display.newImage("imagens/backmenu.png") 
     background.x = display.contentCenterX
     background.y = display.contentCenterY
     sceneGroup:insert( background )
+
+    local backgroundMusic = audio.loadStream( "audio/happy.mp3" )
+	audio.play( backgroundMusic, { channel=2, loops=-1, fadein=5000 } )
+	audio.setVolume( 0.5 )
 
     local title = display.newImage("imagens/enfezado.png") 
     title.x = display.contentCenterX
@@ -45,7 +49,7 @@ function scene:create( event )
         onEvent = iniciarJogoEvent
     })
     iniciarJogoButton.x = display.contentCenterX
-    iniciarJogoButton.y = display.contentCenterY - 100
+    iniciarJogoButton.y = display.contentCenterY - 150
     sceneGroup:insert( iniciarJogoButton )
 
     local creditosButton = widget.newButton({
@@ -56,7 +60,7 @@ function scene:create( event )
         onEvent = creditosEvent
     })
     creditosButton.x = display.contentCenterX
-    creditosButton.y = display.contentCenterY + 120
+    creditosButton.y = display.contentCenterY + 80
     sceneGroup:insert( creditosButton )
 end
 
@@ -77,8 +81,9 @@ end
 
 function scene:hide( event )
     local sceneGroup = self.view
-
+    
     if event.phase == "will" then
+        audio.stop()
     end
 end
 

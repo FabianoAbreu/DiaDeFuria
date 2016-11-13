@@ -13,7 +13,6 @@ local physicsDataED = (require "inimigoEDFisica").physicsData(1.0)
 
 local largura = display.contentWidth
 local altura = display.contentHeight
-local pontuacao = 0
 local sequenceDataDE
 local sequenceDataED
 local inimigos = {}
@@ -47,11 +46,19 @@ local function moverPlayerEsquerdaDireita( self )
 	end
 end
 
+local function setAlpha ( objeto ) 
+	objeto.alpha = 0
+	objeto.alpha = 1
+end
+
 local function detectarColisao( self, event )
 	if ( event.phase == "began" )  then
 		if ( self.myName == "bola" ) and ( event.other.myName == "inimigo" ) then
+			local somColisao = audio.loadSound( "audio/single_shot_from_semi_automatic_paintball_gun.mp3" )
+			audio.play( somColisao )
             pontuacaoCorrente = pontuacaoCorrente + 10
 			pontuacaoCorrenteDisplay.text = string.format( "%06d", pontuacaoCorrente )
+			--event.other.alpha = 0
 			bolinhaPapel.enterFrame = nil
 			display.remove( bolinhaPapel )
 	 	    bolinhaPapel = nil
@@ -61,34 +68,30 @@ end
 
 local function detectarNaoHouveColisao ( self )
 	if 	( self.x > largura ) or ( self.x < 0 ) or 	( self.y > altura ) or ( self.y < 0 ) then
+		local somNaoHouveColisao = audio.loadSound( "audio/single_gun_shot_with_ricochet.mp3" )
+		audio.play( somNaoHouveColisao )
 
 		-- remover a bolinha de papel da tela
 		self.enterFrame = nil
 		display.remove( self )
 	 	self = nil
-
 		quantErros = quantErros + 1
 	end
 end
 
-local function preencherVidaPerdida(event)
+local function preencherVidaPerdida( event )
 	local sceneGroup = scene.view
-	vida1 = display.newImageRect( "Imagens/object.png", 32, 32 )
-  	sceneGroup:insert(vida1)
-   	vida2 = display.newImageRect( "Imagens/object.png", 32, 32 )
-   	sceneGroup:insert(vida2)
-   	vida3 = display.newImageRect( "Imagens/object.png", 32, 32 )
-  	sceneGroup:insert(vida3)
 	
 	if ( quantErros == 1 ) then
+		vida1 = display.newImageRect( "imagens/x.png", 32, 32 )
 		vida1.x = 50
-		vida1.y = 50
+		vida1.y = 40
+		sceneGroup:insert(vida1)
 	elseif ( quantErros == 2 ) then
+		vida2 = display.newImageRect( "imagens/x.png", 32, 32 )
 		vida2.x = 100
-		vida2.y = 50
-	elseif (quantErros == 3) then
-		vida3.x = 150
-		vida3.y = 50
+		vida2.y = 40
+		sceneGroup:insert(vida2)
 	end
 end
 
@@ -136,11 +139,7 @@ end
 
 local function fireProj( event )
 
-	--if ( event.xStart < -ox+44 or event.xStart > display.contentWidth+ox-44
-		--or event.yStart < -oy+44 or event.yStart > display.contentHeight+oy-44 ) then
-		display.remove( prediction )
-		--return
-	--end
+	display.remove( prediction )
 	
 	bolinhaPapel = display.newImageRect( "Imagens/object.png", 64, 64 )
 	physics.addBody( bolinhaPapel, "dynamic", { bounce=0.2, density=1.0, radius=14 } )
@@ -263,23 +262,25 @@ function scene:create( event )
 
 	local backgroundMusic = audio.loadStream( "audio/If_I_Had_a_Chicken.mp3" )
 	audio.play( backgroundMusic, { channel=2, loops=-1, fadein=5000 } )
+	audio.setVolume( 0.5 )
 
-	local vidaDisponivel1 = display.newImageRect( "imagens/object-vida.png", 64, 64 )
+	local vidaDisponivel1 = display.newImageRect( "imagens/object.png", 48, 48 )
 	vidaDisponivel1.x = 50
-	vidaDisponivel1.y = 50
+	vidaDisponivel1.y = 40
 	sceneGroup:insert( vidaDisponivel1 )
 
-	local vidaDisponivel2 = display.newImageRect( "imagens/object-vida.png", 64, 64 )
+	local vidaDisponivel2 = display.newImageRect( "imagens/object.png", 48, 48 )
 	vidaDisponivel2.x = 100
-	vidaDisponivel2.y = 50
+	vidaDisponivel2.y = 40
 	sceneGroup:insert( vidaDisponivel2 )
 	
-	local vidaDisponivel3 = display.newImageRect( "imagens/object-vida.png", 64, 64 )
+	local vidaDisponivel3 = display.newImageRect( "imagens/object.png", 48, 48 )
 	vidaDisponivel3.x = 150
-	vidaDisponivel3.y = 50
+	vidaDisponivel3.y = 40
 	sceneGroup:insert( vidaDisponivel3 )
    
-    pontuacaoCorrenteDisplay = display.newText("000000", display.contentWidth - (largura*0.1), 10, native.systemFont, 50 )
+    pontuacaoCorrenteDisplay = display.newText("00000", display.contentWidth - (largura*0.1), 10, native.systemFont, 50 )
+	pontuacaoCorrenteDisplay:setFillColor(1)
     sceneGroup:insert( pontuacaoCorrenteDisplay )
 end
 

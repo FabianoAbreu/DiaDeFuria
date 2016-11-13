@@ -61,6 +61,9 @@ function scene:create( event )
     background.y = display.contentCenterY
     sceneGroup:insert( background )
 
+    local somColisao = audio.loadSound( "audio/Cartoon_Bank_Heist_Sting.mp3" )
+	audio.play( somColisao )
+
     local title = display.newImage("imagens/fimdejogo.png") 
     title.x = display.contentCenterX
     title.y = 150
@@ -105,6 +108,7 @@ function scene:hide( event )
     local sceneGroup = self.view
     
     if event.phase == "will" then
+        audio.stop()
     end
 
 end
