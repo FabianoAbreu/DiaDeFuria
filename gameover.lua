@@ -7,8 +7,6 @@ local myData = require( "mydata" )
 local gameNetwork = require( "gameNetwork" )
 local device = require( "device" )
 
-local params
-local newHighScore = false
 local largura = display.contentWidth
 local altura = display.contentHeight
 
@@ -35,22 +33,6 @@ local function reiniciarJogoEvent( event )
     end
 end
 
--- local function postToGameNetwork()
---     local category = "com.yourdomain.yourgame.leaderboard"
---     if myData.isGPGS then
---         category = "CgkIusrvppwDJFHJKDFg"
---     end
---     gameNetwork.request("setHighScore", {
---         localPlayerScore = {
---             category = category, 
---             value = myData.settings.bestScore
---         },
---         listener = postScoreSubmit
---     })
--- end
---
--- Start the composer event handlers
---
 function scene:create( event )
     local sceneGroup = self.view
 
@@ -96,26 +78,19 @@ end
 
 function scene:show( event )
     local sceneGroup = self.view
-
-    params = event.params
-
     if event.phase == "did" then
-    
     end
 end
 
 function scene:hide( event )
     local sceneGroup = self.view
-    
     if event.phase == "will" then
         audio.stop()
     end
-
 end
 
 function scene:destroy( event )
     local sceneGroup = self.view
-    
 end
 
 ---------------------------------------------------------------------------------
