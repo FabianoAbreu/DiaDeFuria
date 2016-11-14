@@ -4,20 +4,15 @@ local aspectRatio = display.pixelHeight / display.pixelWidth
 application = {
         content = {
             graphicsCompatibility = 1,
-            width = 1080, --or math.ceil( 1920 / aspectRatio ),
-            height = 1920,--or math.ceil( 1080 * aspectRatio ),
+            width = 1080, 
+            height = 1920,
             scale = "zoomEven",
             fps = 60,
 
-            imageSuffix = {
-                 ["@2x"] = 2.0,
-                ["@4x"] = 4.0,
+            imageSuffix = 
+            {
+                ["@15x"] = 1.5,
+			    ["@2x"] = 2.1,
             },
         },
-   license = {
-      google = {
-         key = "reallylonggooglelicensekeyhere",
-         policy = "serverManaged", 
-      },
-   },
 }

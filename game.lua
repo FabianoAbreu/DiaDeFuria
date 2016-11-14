@@ -3,9 +3,6 @@ local fisica = require("physics")
 local composer = require( "composer" )
 local scene = composer.newScene()
 local widget = require( "widget" )
-local json = require( "json" )
-local utility = require( "utility" )
-local myData = require( "mydata" )
 local sheetInfoInimigoDE = require("inimigoDE")
 local sheetInfoInimigoED = require("inimigoED")
 local physicsDataDE = (require "inimigoDEFisica").physicsData(1.0)
@@ -27,23 +24,25 @@ local pontuacaoCorrente
 local pontuacaoCorrenteDisplay
 local valorAlpha = 1
 
+local function removerObjeto ( objeto )
+	objeto.enterFrame = nil
+	display.remove( objeto )
+	objeto = nil
+end
+
 local function moverPlayerDireitaEsquerda( self )
 	if ( self.x < -100 ) or ( quantErros == 3 ) then
-		self.enterFrame = nil
-		display.remove( self )
-		self = nil
+		removerObjeto( self )
 	elseif ( self.x > -100 ) then
-		self.x = self.x - 5
+		self.x = self.x - 4
 	end
 end
 
 local function moverPlayerEsquerdaDireita( self )
 	if ( self.x > 2020 ) or ( quantErros == 3 ) then
-		self.enterFrame = nil
-		display.remove( self )
-		self = nil
+		removerObjeto( self )
 	elseif ( self.x < 2020 ) then
-		self.x = self.x + 5
+		self.x = self.x + 4
 	end
 end
 
@@ -59,9 +58,7 @@ local function detectarColisao( self, event )
             pontuacaoCorrente = pontuacaoCorrente + 10
 			pontuacaoCorrenteDisplay.text = string.format( "%06d", pontuacaoCorrente )
 			setAlpha(event.other)
-			bolinhaPapel.enterFrame = nil
-			display.remove( bolinhaPapel )
-	 	    bolinhaPapel = nil
+			removerObjeto( bolinhaPapel )
 		end
     end
 end
@@ -70,11 +67,7 @@ local function detectarNaoHouveColisao ( self )
 	if 	( self.x > largura ) or ( self.x < 0 ) or 	( self.y > altura ) or ( self.y < 0 ) then
 		local somNaoHouveColisao = audio.loadSound( "audio/single_gun_shot_with_ricochet.mp3" )
 		audio.play( somNaoHouveColisao )
-
-		-- remover a bolinha de papel da tela
-		self.enterFrame = nil
-		display.remove( self )
-	 	self = nil
+		removerObjeto( self )
 		quantErros = quantErros + 1
 	end
 end
@@ -83,14 +76,14 @@ local function preencherVidaPerdida( event )
 	local sceneGroup = scene.view
 	
 	if ( quantErros == 1 ) then
-		vida1 = display.newImageRect( "imagens/x.png", 32, 32 )
-		vida1.x = 50
-		vida1.y = 40
+		vida1 = display.newImageRect( "imagens/x.png", 42, 42 )
+		vida1.x = 100
+		vida1.y = 30
 		sceneGroup:insert(vida1)
 	elseif ( quantErros == 2 ) then
-		vida2 = display.newImageRect( "imagens/x.png", 32, 32 )
-		vida2.x = 100
-		vida2.y = 40
+		vida2 = display.newImageRect( "imagens/x.png", 42, 42 )
+		vida2.x = 150
+		vida2.y = 30
 		sceneGroup:insert(vida2)
 	end
 end
@@ -141,7 +134,7 @@ local function fireProj( event )
 
 	display.remove( prediction )
 	
-	bolinhaPapel = display.newImageRect( "Imagens/object.png", 64, 64 )
+	bolinhaPapel = display.newImageRect( "imagens/object.png", 64, 64 )
 	physics.addBody( bolinhaPapel, "dynamic", { bounce=0.2, density=1.0, radius=14 } )
 	bolinhaPapel.x, bolinhaPapel.y = largura*0.48, altura*0.25
 	local vx, vy = event.x-event.xStart, event.y-event.yStart
@@ -181,10 +174,10 @@ sequenceDataED =
    { name = "moveLeft", sheet = "inimigoED", start = 1, count = 4, time = 500, loopCount = 0 },
 }
 
-local sheetInimigoDE_1 = graphics.newImageSheet("Imagens/inimigoDE_1.png", sheetInfoInimigoDE:getSheet())
-local sheetInimigoED_1 = graphics.newImageSheet("Imagens/inimigoED_1.png", sheetInfoInimigoED:getSheet())
-local sheetInimigoDE_2 = graphics.newImageSheet("Imagens/inimigoDE_2.png", sheetInfoInimigoDE:getSheet())
-local sheetInimigoED_2 = graphics.newImageSheet("Imagens/inimigoED_2.png", sheetInfoInimigoED:getSheet())
+local sheetInimigoDE_1 = graphics.newImageSheet("imagens/inimigoDE_1.png", sheetInfoInimigoDE:getSheet())
+local sheetInimigoED_1 = graphics.newImageSheet("imagens/inimigoED_1.png", sheetInfoInimigoED:getSheet())
+local sheetInimigoDE_2 = graphics.newImageSheet("imagens/inimigoDE_2.png", sheetInfoInimigoDE:getSheet())
+local sheetInimigoED_2 = graphics.newImageSheet("imagens/inimigoED_2.png", sheetInfoInimigoED:getSheet())
 
 local function criandoInimigos(index)
 	if ( index == 1 ) then
@@ -242,7 +235,7 @@ local function inserindoInimigosNaTela ( event )
 	local index  = math.random(6)
 	
 	if (index == verificarIndex) then
-		inserindoInimigosNaTela()
+		
 	else
 		criandoInimigos(index)
 		inimigos[index].collision = detectarColisao
@@ -257,30 +250,29 @@ function scene:create( event )
     local sceneGroup = self.view
     fisica.start()
 
-    local background = display.newImage("imagens/background.png") 
+    local background = display.newImage("imagens/back-game2.png") 
     sceneGroup:insert( background )
 
 	local backgroundMusic = audio.loadStream( "audio/If_I_Had_a_Chicken.mp3" )
-	audio.play( backgroundMusic, { channel=2, loops=-1, fadein=5000 } )
+	audio.play( backgroundMusic, { channel=1, loops=-1, fadein=500 } )
 	audio.setVolume( 0.5 )
 
 	local vidaDisponivel1 = display.newImageRect( "imagens/object.png", 48, 48 )
-	vidaDisponivel1.x = 50
-	vidaDisponivel1.y = 40
+	vidaDisponivel1.x = 100
+	vidaDisponivel1.y = 30
 	sceneGroup:insert( vidaDisponivel1 )
 
 	local vidaDisponivel2 = display.newImageRect( "imagens/object.png", 48, 48 )
-	vidaDisponivel2.x = 100
-	vidaDisponivel2.y = 40
+	vidaDisponivel2.x = 150
+	vidaDisponivel2.y = 30
 	sceneGroup:insert( vidaDisponivel2 )
 	
 	local vidaDisponivel3 = display.newImageRect( "imagens/object.png", 48, 48 )
-	vidaDisponivel3.x = 150
-	vidaDisponivel3.y = 40
+	vidaDisponivel3.x = 200
+	vidaDisponivel3.y = 30
 	sceneGroup:insert( vidaDisponivel3 )
    
-    pontuacaoCorrenteDisplay = display.newText("00000", display.contentWidth - (largura*0.1), 10, native.systemFont, 50 )
-	pontuacaoCorrenteDisplay:setFillColor(1)
+    pontuacaoCorrenteDisplay = display.newText("00000", display.contentWidth - (largura*0.2), 0, native.systemFont, 50 )
     sceneGroup:insert( pontuacaoCorrenteDisplay )
 end
 

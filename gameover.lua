@@ -1,11 +1,6 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 local widget = require( "widget" )
-local json = require( "json" )
-local utility = require( "utility" )
-local myData = require( "mydata" )
-local gameNetwork = require( "gameNetwork" )
-local device = require( "device" )
 
 local largura = display.contentWidth
 local altura = display.contentHeight
@@ -38,7 +33,7 @@ function scene:create( event )
 
     params = event.params
 
-    local background = display.newRect( 0, 0, 1920, 1080)
+    local background = display.newImage("imagens/backmenu.png") 
     background.x = display.contentCenterX
     background.y = display.contentCenterY
     sceneGroup:insert( background )
@@ -61,7 +56,7 @@ function scene:create( event )
         onEvent = voltarParaOMenuEvent
     })
     voltarAoMenuButton.x = display.contentCenterX
-    voltarAoMenuButton.y = display.contentCenterY - 100
+    voltarAoMenuButton.y = display.contentCenterY - 150
     sceneGroup:insert( voltarAoMenuButton )
 
     local reiniciarJogoButton = widget.newButton({
@@ -72,7 +67,7 @@ function scene:create( event )
         onEvent = reiniciarJogoEvent
     })
     reiniciarJogoButton.x = display.contentCenterX
-    reiniciarJogoButton.y = display.contentCenterY + 120
+    reiniciarJogoButton.y = display.contentCenterY + 80
     sceneGroup:insert( reiniciarJogoButton )
 end
 

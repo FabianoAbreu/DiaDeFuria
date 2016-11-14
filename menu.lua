@@ -1,11 +1,6 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 local widget = require( "widget" )
-local utility = require( "utility" )
-local ads = require( "ads" )
-local myData = require( "mydata" )
-
-local params
 
 local function iniciarJogoEvent( event )
     if ( "ended" == event.phase ) then
@@ -22,8 +17,6 @@ end
 
 function scene:create( event )
     local sceneGroup = self.view
-
-    params = event.params
 
     local background = display.newImage("imagens/backmenu.png") 
     background.x = display.contentCenterX
@@ -66,14 +59,6 @@ end
 
 function scene:show( event )
     local sceneGroup = self.view
-    params = event.params
-    utility.print_r(event)
-
-    if params then
-        print(params.someKey)
-        print(params.someOtherKey)
-    end
-
     if event.phase == "did" then
         composer.removeScene( "game" ) 
     end
@@ -81,7 +66,6 @@ end
 
 function scene:hide( event )
     local sceneGroup = self.view
-    
     if event.phase == "will" then
         audio.stop()
     end
