@@ -2,9 +2,9 @@ local composer = require( "composer" )
 local scene = composer.newScene()
 local widget = require( "widget" )
 
-local function handleButtonEvent( event )
-
+local function voltarParaOMenuEvent( event )
     if ( "ended" == event.phase ) then
+        composer.removeScene( "menu", false )
         composer.gotoScene("menu", { effect = "crossFade", time = 333 })
     end
 end
@@ -12,33 +12,23 @@ end
 function scene:create( event )
     local sceneGroup = self.view
 
-    local background = display.newRect( 0, 0, 570, 360)
-    background.x = display.contentCenterX
-    background.y = display.contentCenterY
-    sceneGroup:insert(background)
+    local backcredits = display.newImage("imagens/credits.png") 
+    backcredits.x = display.contentCenterX
+    backcredits.y = display.contentCenterY
+    sceneGroup:insert(backcredits)
 
-    local title = display.newText( "Game Title", 100, 32, native.systemFontBold, 32)
-    title.x = display.contentCenterX
-    title.y = 40
-    title:setFillColor( 0 )
-    sceneGroup:insert( title )
-
-    local creditText = display.newText( "Game by Me!", 250, 250, native.systemFont, 16 )
-    creditText:setFillColor( 0 )
-    creditText.x = display.contentCenterX
-    creditText.y = display.contentCenterY 
-    sceneGroup:insert(creditText)
-
-    local doneButton = widget.newButton({
-        id = "button1",
-        label = "Done",
-        width = 100,
-        height = 32,
-        onEvent = handleButtonEvent
+    local voltarAoMenuButton = widget.newButton({
+         id = "button1",
+        label = "Return",
+        font = "ASPHALTIC GRAIN CONDENSED PERSONAL USE.ttf",
+        fontSize = 125,
+        textOnly = true,
+        labelColor = { default={ 1, 1, 1 }, over={ 0, 0, 0, 0.5 } },
+        onEvent = voltarParaOMenuEvent
     })
-    doneButton.x = display.contentCenterX
-    doneButton.y = display.contentHeight - 40
-    sceneGroup:insert( doneButton )
+    voltarAoMenuButton.x = display.contentCenterX
+    voltarAoMenuButton.y = display.contentCenterY + (display.contentCenterY * 0.8)
+    sceneGroup:insert( voltarAoMenuButton )
 end
 
 function scene:show( event )
