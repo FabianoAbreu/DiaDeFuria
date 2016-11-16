@@ -27,32 +27,36 @@ function scene:create( event )
 	audio.play( backgroundMusic, { channel=2, loops=-1, fadein=5000 } )
 	audio.setVolume( 0.5 )
 
-    local title = display.newImage("imagens/enfezado.png") 
+    local title = display.newText( "Furious", 10, 10, "28 Days Later.ttf", 300) 
     title.x = display.contentCenterX
-    title.y = 150
-    title.width = 800
-    title.height = 150
+    title.y = display.contentCenterY - 230
+    title:setFillColor(1)
     sceneGroup:insert( title )
 
     local iniciarJogoButton = widget.newButton ({
-        defaultFile = "imagens/iniciar.png",
         id = "button1",
-        width = 500,
-        height = 150,
+        label = "Play",
+        font = "ASPHALTIC GRAIN CONDENSED PERSONAL USE.ttf",
+        fontSize = 150,
+        textOnly = true,
+        labelColor = { default={ 1, 1, 1 }, over={ 0, 0, 0, 0.5 } },
         onEvent = iniciarJogoEvent
     })
-    iniciarJogoButton.x = display.contentCenterX
-    iniciarJogoButton.y = display.contentCenterY - 150
+    iniciarJogoButton.x = display.contentCenterX - 250
+    iniciarJogoButton.y = display.contentCenterY + 80
     sceneGroup:insert( iniciarJogoButton )
 
     local creditosButton = widget.newButton({
-        defaultFile = "imagens/creditos.png",
-        id = "button4",
-        width = 500,
-        height = 150,
+         id = "button2",
+        label = "Credits",
+        font = "ASPHALTIC GRAIN CONDENSED PERSONAL USE.ttf",
+        fontSize = 150,
+        textOnly = true,
+        --width = 2000,
+        labelColor = { default={ 1, 1, 1 }, over={ 0, 0, 0, 0.5 } },
         onEvent = creditosEvent
     })
-    creditosButton.x = display.contentCenterX
+    creditosButton.x = display.contentCenterX + 230
     creditosButton.y = display.contentCenterY + 80
     sceneGroup:insert( creditosButton )
 end
