@@ -41,32 +41,35 @@ function scene:create( event )
     local somColisao = audio.loadSound( "audio/Cartoon_Bank_Heist_Sting.mp3" )
 	audio.play( somColisao )
 
-    local title = display.newImage("imagens/fimdejogo.png") 
+    local title = display.newText( "Game Over", 10, 10, "28 Days Later.ttf", 250)
     title.x = display.contentCenterX
-    title.y = 150
-    title.width = 800
-    title.height = 150
+    title.y = display.contentCenterY - 230
+    title:setFillColor(1)
     sceneGroup:insert(title)
 
     local voltarAoMenuButton = widget.newButton({
-        defaultFile = "imagens/menu.png",
-        id = "menu",
-        width = 500,
-        height = 110,
+         id = "button1",
+        label = "Menu",
+        font = "ASPHALTIC GRAIN CONDENSED PERSONAL USE.ttf",
+        fontSize = 150,
+        textOnly = true,
+        labelColor = { default={ 1, 1, 1 }, over={ 0, 0, 0, 0.5 } },
         onEvent = voltarParaOMenuEvent
     })
-    voltarAoMenuButton.x = display.contentCenterX
-    voltarAoMenuButton.y = display.contentCenterY - 150
+    voltarAoMenuButton.x = display.contentCenterX - 250
+    voltarAoMenuButton.y = display.contentCenterY + 80
     sceneGroup:insert( voltarAoMenuButton )
 
     local reiniciarJogoButton = widget.newButton({
-         defaultFile = "imagens/jogar.png",
-        id = "reiniciarJogo",
-        width = 500,
-        height = 150,
+        id = "button2",
+        label = "Restart",
+        font = "ASPHALTIC GRAIN CONDENSED PERSONAL USE.ttf",
+        fontSize = 150,
+        textOnly = true,
+        labelColor = { default={ 1, 1, 1 }, over={ 0, 0, 0, 0.5 } },
         onEvent = reiniciarJogoEvent
     })
-    reiniciarJogoButton.x = display.contentCenterX
+    reiniciarJogoButton.x = display.contentCenterX + 250
     reiniciarJogoButton.y = display.contentCenterY + 80
     sceneGroup:insert( reiniciarJogoButton )
 end
