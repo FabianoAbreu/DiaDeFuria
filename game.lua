@@ -250,7 +250,7 @@ function scene:create( event )
     local sceneGroup = self.view
     fisica.start()
 
-    local background = display.newImage("imagens/back-game2.png") 
+    local background = display.newImage("imagens/backgame.png") 
     sceneGroup:insert( background )
 
 	local backgroundMusic = audio.loadStream( "audio/If_I_Had_a_Chicken.mp3" )
