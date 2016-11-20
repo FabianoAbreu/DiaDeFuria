@@ -77,12 +77,12 @@ local function preencherVidaPerdida( event )
 	
 	if ( quantErros == 1 ) then
 		vida1 = display.newImageRect( "imagens/x.png", 42, 42 )
-		vida1.x = 100
+		vida1.x =  altura * 0.1
 		vida1.y = 30
 		sceneGroup:insert(vida1)
 	elseif ( quantErros == 2 ) then
 		vida2 = display.newImageRect( "imagens/x.png", 42, 42 )
-		vida2.x = 150
+		vida2.x =  (altura * 0.1) + 50
 		vida2.y = 30
 		sceneGroup:insert(vida2)
 	end
@@ -258,21 +258,21 @@ function scene:create( event )
 	audio.setVolume( 0.5 )
 
 	local vidaDisponivel1 = display.newImageRect( "imagens/object.png", 48, 48 )
-	vidaDisponivel1.x = 100
+	vidaDisponivel1.x = altura * 0.1
 	vidaDisponivel1.y = 30
 	sceneGroup:insert( vidaDisponivel1 )
 
 	local vidaDisponivel2 = display.newImageRect( "imagens/object.png", 48, 48 )
-	vidaDisponivel2.x = 150
+	vidaDisponivel2.x = (altura * 0.1) + 50
 	vidaDisponivel2.y = 30
 	sceneGroup:insert( vidaDisponivel2 )
 	
 	local vidaDisponivel3 = display.newImageRect( "imagens/object.png", 48, 48 )
-	vidaDisponivel3.x = 200
+	vidaDisponivel3.x =  (altura * 0.1) + 100
 	vidaDisponivel3.y = 30
 	sceneGroup:insert( vidaDisponivel3 )
    
-    pontuacaoCorrenteDisplay = display.newText("00000", display.contentWidth - (largura*0.2), 0, native.systemFont, 50 )
+    pontuacaoCorrenteDisplay = display.newText("00000", display.contentWidth - (largura*0.13), 0, native.systemFont, 50 )
     sceneGroup:insert( pontuacaoCorrenteDisplay )
 end
 
